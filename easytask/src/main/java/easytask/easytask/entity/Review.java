@@ -24,15 +24,14 @@ public class Review extends BaseEntity {
     private CompleteTask completeTask;
 
     private double totalRating;
-    private double professionalSkill;
-    private double programSkill;
-    private double personalSkill;
+    private double professionalSkillRating;
+    private double programSkillRating;
+    private double personalSkillRating;
 
     private String reviewText;
 
     @Enumerated(EnumType.STRING)
     private Recommendation recommendation;
 
-    //역량 부분 세분화 해야합니다~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 }
