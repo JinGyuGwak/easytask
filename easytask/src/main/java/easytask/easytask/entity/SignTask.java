@@ -21,4 +21,12 @@ public class SignTask extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerId" )
     private User customerUser;
+
+    private String userEmail;
+
+    public SignTask(User user){
+        this.customerUser=user;
+        this.userEmail=user.getEmail();
+    }
+
 }

@@ -1,4 +1,4 @@
-package easytask.easytask.exception;
+package easytask.easytask.common.exception;
 
 import lombok.Getter;
 import lombok.Setter;

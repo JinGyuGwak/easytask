@@ -1,5 +1,6 @@
 package easytask.easytask.entity;
 
+import easytask.easytask.controller.requestDTO.UserRequestDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +28,13 @@ public class User extends BaseEntity{
     @Column(nullable = false, length = 30)
     private String name;
 
+    @Column(nullable = false)
+    private String password;
+
+
+
     @ColumnDefault("0")
-    private Long point; //이용권
+    private int point; //이용권
 
     @ColumnDefault("0")
     private int money;
@@ -41,4 +47,15 @@ public class User extends BaseEntity{
 
     @OneToMany(mappedBy = "customerUser")
     List<CompleteTask> customerList = new ArrayList<>();
+
+    public User (UserRequestDto userRequestDto){
+        this.email= userRequestDto.getEmail();
+        this.name= userRequestDto.getName();
+        this.password= userRequestDto.getPassword();
+    }
+    public void patchUser(UserRequestDto userRequestDto){
+        this.email= userRequestDto.getEmail();
+        this.name= userRequestDto.getName();
+        this.password= userRequestDto.getPassword();
+    }
 }
