@@ -24,7 +24,7 @@ public class UserService {
 
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new BaseException("존재하지 않는 회원 입니다."));
-        user.patchUser(request); //id값 받아오자
+        user.patchUser(request);
         return new UserResponseDto(user);
     }
 

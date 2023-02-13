@@ -24,7 +24,6 @@ public class UserController {
     public BaseResponse<UserResponseDto> patchUser(
             @RequestParam Long id,
             @RequestBody UserRequestDto request){
-        System.out.println("id = " + id);
         UserResponseDto userResponseDto = userService.patchUser(id, request);
         return new BaseResponse<>(userResponseDto);
     }

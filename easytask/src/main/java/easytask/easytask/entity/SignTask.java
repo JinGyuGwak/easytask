@@ -28,5 +28,9 @@ public class SignTask extends BaseEntity{
         this.customerUser=user;
         this.userEmail=user.getEmail();
     }
+    public void completion()
+    {
+        this.state=State.INACTIVE;
+    }
 
 }

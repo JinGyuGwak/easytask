@@ -1,5 +1,6 @@
 package easytask.easytask.entity;
 
+import easytask.easytask.controller.requestDTO.ReviewRequestDto;
 import easytask.easytask.entity.enumClass.Recommendation;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,6 +20,14 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "irumiId")
+    private User irumiUser;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customerId")
+    private User customerUser;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "completeTaskId")
     private CompleteTask completeTask;
@@ -33,5 +42,28 @@ public class Review extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Recommendation recommendation;
 
+    public Review(CompleteTask task,ReviewRequestDto requestDto){
+        this.completeTask=task;
+        this.irumiUser=task.getIrumiUser();
+        this.customerUser=task.getCustomerUser();
+        this.totalRating=requestDto.getTotalRating();
+        this.professionalSkillRating=requestDto.getProfessionalSkillRating();
+        this.programSkillRating=requestDto.getProgramSkillRating();
+        this.personalSkillRating = requestDto.getPersonalSkillRating();
+        this.reviewText=requestDto.getReviewText();
+        this.recommendation=requestDto.getRecommendation();
+    }
+    public void modifyReview(ReviewRequestDto requestDto){
+        this.totalRating=requestDto.getTotalRating();
+        this.professionalSkillRating=requestDto.getProfessionalSkillRating();
+        this.programSkillRating=requestDto.getProgramSkillRating();
+        this.personalSkillRating = requestDto.getPersonalSkillRating();
+        this.reviewText=requestDto.getReviewText();
+        this.recommendation=requestDto.getRecommendation();
 
+    }
+
+    public void deleteReview() {
+        this.state=State.INACTIVE;
+    }
 }

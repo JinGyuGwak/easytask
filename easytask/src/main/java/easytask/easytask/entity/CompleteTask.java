@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 
 @Entity
@@ -32,12 +33,25 @@ public class CompleteTask extends BaseEntity{
     @JoinColumn(name = "customerId")
     private User customerUser;
 
-    private LocalDateTime takeTime;
+    private LocalTime usageTime;
 
     private int money;
 
     @OneToOne(mappedBy = "completeTask",fetch = FetchType.LAZY)
     private Review review;
+
+    public CompleteTask(SignTask signTask, User irumiUser,LocalTime usageTime){
+        this.signTask=signTask;
+        this.customerUser=signTask.getCustomerUser();
+        this.irumiUser=irumiUser;
+        this.usageTime=usageTime;
+        this.money=usageTime.getHour()*60*160
+                + usageTime.getMinute()*160
+                + usageTime.getSecond()*160/60;
+
+
+
+    }
 
 
 
