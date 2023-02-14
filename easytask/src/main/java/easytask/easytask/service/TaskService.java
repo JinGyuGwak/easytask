@@ -8,6 +8,8 @@ import easytask.easytask.controller.responseDTO.SignTaskResponseDto;
 import easytask.easytask.entity.CompleteTask;
 import easytask.easytask.entity.SignTask;
 import easytask.easytask.entity.User;
+import easytask.easytask.entity.skill.ProfessionalSkill;
+import easytask.easytask.entity.skill.ProgramSkill;
 import easytask.easytask.repository.CompleteTaskRepository;
 import easytask.easytask.repository.SignTaskRepository;
 import easytask.easytask.repository.UserRepository;
@@ -29,10 +31,28 @@ public class TaskService {
     public SignTaskResponseDto registerTask(SignTaskRequestDto request){
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new BaseException("잘못된 요청입니다."));
-        SignTask signTask = signTaskRepository.save((new SignTask(user)));
-        return new SignTaskResponseDto(signTask);
-    }
 
+        SignTask signTask = new SignTask(user);
+        if(request.getProfessionalSkill()!=null){
+            for(String a : request.getProfessionalSkill()){
+                signTask.addProfessionalSkill(new ProfessionalSkill(a));
+            }
+        }
+        if(request.getProgramSkill() != null){
+            for(String a : request.getProgramSkill()){
+                signTask.addProgramSkill(new ProgramSkill(a));
+            }
+        }
+//        if(request.getPersonalSkill() != null){
+//            for(String a : request.getPersonalSkill()){
+//                signTask.addPersonalSkill(new PersonalSkill(a));
+//            }
+//        }
+
+        SignTask saveSignTask = signTaskRepository.save(signTask);
+        return new SignTaskResponseDto(saveSignTask);
+
+    }
     public List<SignTaskResponseDto> getTask(){
         List<SignTask> signTask = signTaskRepository.findAllSignTask();
         List<SignTaskResponseDto> result = signTask.stream()

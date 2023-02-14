@@ -2,12 +2,17 @@ package easytask.easytask.entity;
 
 import easytask.easytask.controller.requestDTO.ReviewRequestDto;
 import easytask.easytask.entity.enumClass.Recommendation;
+import easytask.easytask.entity.skill.PersonalSkillRating;
+import easytask.easytask.entity.skill.ProfessionalSkillRating;
+import easytask.easytask.entity.skill.ProgramSkillRating;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "REVIEW")
@@ -33,9 +38,20 @@ public class Review extends BaseEntity {
     private CompleteTask completeTask;
 
     private double totalRating;
-    private double professionalSkillRating;
-    private double programSkillRating;
-    private double personalSkillRating;
+
+    private double professionalSkill;
+
+    private double programSkill;
+
+    private double personalSkill;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    List<PersonalSkillRating> personalSkillRatingList = new ArrayList<>();
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    List<ProfessionalSkillRating> professionalSkillRatingList = new ArrayList<>();
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    List<ProgramSkillRating> programSkillRatingList = new ArrayList<>();
+
 
     private String reviewText;
 
@@ -47,21 +63,33 @@ public class Review extends BaseEntity {
         this.irumiUser=task.getIrumiUser();
         this.customerUser=task.getCustomerUser();
         this.totalRating=requestDto.getTotalRating();
-        this.professionalSkillRating=requestDto.getProfessionalSkillRating();
-        this.programSkillRating=requestDto.getProgramSkillRating();
-        this.personalSkillRating = requestDto.getPersonalSkillRating();
+        this.professionalSkill=requestDto.getProfessionalSkillRating();
+        this.programSkill=requestDto.getProgramSkillRating();
+        this.personalSkill = requestDto.getPersonalSkillRating();
         this.reviewText=requestDto.getReviewText();
         this.recommendation=requestDto.getRecommendation();
     }
     public void modifyReview(ReviewRequestDto requestDto){
         this.totalRating=requestDto.getTotalRating();
-        this.professionalSkillRating=requestDto.getProfessionalSkillRating();
-        this.programSkillRating=requestDto.getProgramSkillRating();
-        this.personalSkillRating = requestDto.getPersonalSkillRating();
+        this.professionalSkill=requestDto.getProfessionalSkillRating();
+        this.programSkill=requestDto.getProgramSkillRating();
+        this.personalSkill = requestDto.getPersonalSkillRating();
         this.reviewText=requestDto.getReviewText();
         this.recommendation=requestDto.getRecommendation();
-
     }
+    public void addPersonalSkillRating(PersonalSkillRating rating){
+        rating.setReview(this);
+        this.personalSkillRatingList.add(rating);
+    }
+    public void addProfessionalSkillRating(ProfessionalSkillRating rating){
+        rating.setReview(this);
+        this.professionalSkillRatingList.add(rating);
+    }
+    public void addProgramSkillRating(ProgramSkillRating rating){
+        rating.setReview(this);
+        this.programSkillRatingList.add(rating);
+    }
+
 
     public void deleteReview() {
         this.state=State.INACTIVE;

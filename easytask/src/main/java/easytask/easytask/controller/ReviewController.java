@@ -48,7 +48,8 @@ public class ReviewController {
         List<GetReviewDto> getReviewDtoList = reviewService.getUserReview(irumiId);
         return new BaseResponse<>(getReviewDtoList);
     }
-    //전부조회
+
+    //리뷰상세조회
     @GetMapping("/review-detail/{reviewId}")
     public BaseResponse<GetDetailReviewDto> getDetailUserReview(
             @PathVariable Long reviewId){

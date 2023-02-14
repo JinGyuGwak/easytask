@@ -24,12 +24,13 @@ public class ReviewService {
     private final CompleteTaskRepository completeTaskRepository;
     private final ReviewRepository reviewRepository;
 
+
+
     public ReviewResponseDto createReview(Long completeTaskId, ReviewRequestDto requestDto) {
         CompleteTask task = completeTaskRepository.findById(completeTaskId)
                 .orElseThrow(() -> new BaseException("해당 업무를 찾을 수 없습니다."));
         Review review = reviewRepository.save((new Review(task,requestDto)));
         return new ReviewResponseDto(review);
-
     }
 
     public ReviewResponseDto modifyReview(Long reviewId, ReviewRequestDto requestDto) {
@@ -54,6 +55,7 @@ public class ReviewService {
         return reviewDtoList;
     }
 
+    //리뷰상세조회
     public GetDetailReviewDto getDetailUserReview(Long reviewId) {
         Review review=reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new BaseException("존재하지 않는 리뷰입니다."));

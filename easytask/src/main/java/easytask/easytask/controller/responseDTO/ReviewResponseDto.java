@@ -25,9 +25,9 @@ public class ReviewResponseDto {
     public ReviewResponseDto(Review review){
         this.completeTaskId=review.getCompleteTask().getId();
         this.totalRating= review.getTotalRating();
-        this.professionalSkillRating=review.getProfessionalSkillRating();
-        this.programSkillRating=review.getProgramSkillRating();
-        this.personalSkillRating=review.getPersonalSkillRating();
+        this.professionalSkillRating=review.getProfessionalSkill();
+        this.programSkillRating=review.getProgramSkill();
+        this.personalSkillRating=review.getPersonalSkill();
         this.reviewText=review.getReviewText();
         this.recommendation=review.getRecommendation();
 
