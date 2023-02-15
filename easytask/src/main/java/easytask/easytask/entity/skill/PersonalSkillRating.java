@@ -29,8 +29,15 @@ public class PersonalSkillRating extends BaseEntity {
     @JoinColumn(name = "reviewId")
     private Review review;
 
+    public PersonalSkillRating(String skillName, double rating){
+        this.skillName=skillName;
+        this.rating=rating;
+    }
+
     public void setReview(Review review){
         this.review=review;
     }
+
+
 
 }

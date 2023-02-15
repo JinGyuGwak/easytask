@@ -11,7 +11,7 @@ import java.util.List;
 public interface SignTaskRepository extends JpaRepository<SignTask,Long> {
 
 
-    @Query("select s from SignTask s" +
+    @Query("select distinct s from SignTask s" +
             " join fetch s.customerUser")
     List<SignTask> findAllSignTask();
 

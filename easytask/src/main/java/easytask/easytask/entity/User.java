@@ -32,7 +32,6 @@ public class User extends BaseEntity{
     private String password;
 
 
-
     @ColumnDefault("0")
     private int point; //이용권
 
@@ -47,6 +46,9 @@ public class User extends BaseEntity{
 
     @OneToMany(mappedBy = "customerUser")
     List<CompleteTask> customerList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "irumiUser")
+    List<Review> reviewList = new ArrayList<>();
 
     public User (UserRequestDto userRequestDto){
         this.email= userRequestDto.getEmail();

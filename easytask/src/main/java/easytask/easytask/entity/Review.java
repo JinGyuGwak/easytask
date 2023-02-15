@@ -38,19 +38,17 @@ public class Review extends BaseEntity {
     private CompleteTask completeTask;
 
     private double totalRating;
-
     private double professionalSkill;
-
     private double programSkill;
-
     private double personalSkill;
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
-    List<PersonalSkillRating> personalSkillRatingList = new ArrayList<>();
+
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     List<ProfessionalSkillRating> professionalSkillRatingList = new ArrayList<>();
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     List<ProgramSkillRating> programSkillRatingList = new ArrayList<>();
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    List<PersonalSkillRating> personalSkillRatingList = new ArrayList<>();
 
 
     private String reviewText;
@@ -77,17 +75,20 @@ public class Review extends BaseEntity {
         this.reviewText=requestDto.getReviewText();
         this.recommendation=requestDto.getRecommendation();
     }
-    public void addPersonalSkillRating(PersonalSkillRating rating){
-        rating.setReview(this);
-        this.personalSkillRatingList.add(rating);
-    }
     public void addProfessionalSkillRating(ProfessionalSkillRating rating){
-        rating.setReview(this);
         this.professionalSkillRatingList.add(rating);
-    }
-    public void addProgramSkillRating(ProgramSkillRating rating){
         rating.setReview(this);
+
+    }
+
+    public void addPersonalSkillRating(PersonalSkillRating rating){
+        this.personalSkillRatingList.add(rating);
+        rating.setReview(this);
+    }
+
+    public void addProgramSkillRating(ProgramSkillRating rating){
         this.programSkillRatingList.add(rating);
+        rating.setReview(this);
     }
 
 

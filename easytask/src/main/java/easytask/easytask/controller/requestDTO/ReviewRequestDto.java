@@ -17,7 +17,9 @@ public class ReviewRequestDto {
     private double programSkillRating;
     private double personalSkillRating;
 
-    private List<Map<String, Double>> skill;
+    private List<Map<String, Double>> professionalDetail;
+    private List<Map<String, Double>> programDetail;
+    private List<Map<String, Double>> personalDetail;
 
     private String reviewText;
     private Recommendation recommendation;

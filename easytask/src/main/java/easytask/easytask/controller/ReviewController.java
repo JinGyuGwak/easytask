@@ -40,6 +40,7 @@ public class ReviewController {
         String result = "삭제 완료!";
         return new BaseResponse<>(result);
     }
+
     //전부조회
     @GetMapping("/review/{irumiId}")
     public BaseResponse<List<GetReviewDto>> getUserReview(
