@@ -2,7 +2,6 @@ package easytask.easytask.entity;
 
 import easytask.easytask.controller.requestDTO.ReviewRequestDto;
 import easytask.easytask.entity.enumClass.Recommendation;
-import easytask.easytask.entity.skill.PersonalSkillRating;
 import easytask.easytask.entity.skill.ProfessionalSkillRating;
 import easytask.easytask.entity.skill.ProgramSkillRating;
 import lombok.AccessLevel;
@@ -47,8 +46,9 @@ public class Review extends BaseEntity {
     List<ProfessionalSkillRating> professionalSkillRatingList = new ArrayList<>();
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     List<ProgramSkillRating> programSkillRatingList = new ArrayList<>();
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
-    List<PersonalSkillRating> personalSkillRatingList = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+//    List<PersonalSkillRating> personalSkillRatingList = new ArrayList<>();
 
 
     private String reviewText;
@@ -80,12 +80,6 @@ public class Review extends BaseEntity {
         rating.setReview(this);
 
     }
-
-    public void addPersonalSkillRating(PersonalSkillRating rating){
-        this.personalSkillRatingList.add(rating);
-        rating.setReview(this);
-    }
-
     public void addProgramSkillRating(ProgramSkillRating rating){
         this.programSkillRatingList.add(rating);
         rating.setReview(this);

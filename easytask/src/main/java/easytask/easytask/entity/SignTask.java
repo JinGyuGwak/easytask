@@ -30,7 +30,6 @@ public class SignTask extends BaseEntity{
 
     private String userEmail;
 
-
     @OneToMany(mappedBy = "signTask", cascade = CascadeType.ALL)
     List<ProgramSkill> programSkillList = new ArrayList<>();
 

@@ -5,9 +5,9 @@ import easytask.easytask.controller.requestDTO.ReviewRequestDto;
 import easytask.easytask.controller.responseDTO.GetDetailReviewDto;
 import easytask.easytask.controller.responseDTO.GetReviewDto;
 import easytask.easytask.controller.responseDTO.ReviewResponseDto;
+import easytask.easytask.controller.responseDTO.SkillDetailResponseDto;
 import easytask.easytask.entity.CompleteTask;
 import easytask.easytask.entity.Review;
-import easytask.easytask.entity.skill.PersonalSkillRating;
 import easytask.easytask.entity.skill.ProfessionalSkillRating;
 import easytask.easytask.entity.skill.ProgramSkillRating;
 import easytask.easytask.repository.CompleteTaskRepository;
@@ -50,13 +50,13 @@ public class ReviewService {
                 review.addProgramSkillRating(new ProgramSkillRating(skill, rating));
             }
         }
-        if (requestDto.getPersonalDetail() != null) {
-            for (Map<String, Double> a : requestDto.getPersonalDetail()) {
-                String skill = a.keySet().iterator().next();
-                Double rating = a.values().iterator().next();
-                review.addPersonalSkillRating(new PersonalSkillRating(skill, rating));
-            }
-        }
+//        if (requestDto.getPersonalDetail() != null) {
+//            for (Map<String, Double> a : requestDto.getPersonalDetail()) {
+//                String skill = a.keySet().iterator().next();
+//                Double rating = a.values().iterator().next();
+//                review.addPersonalSkillRating(new PersonalSkillRating(skill, rating));
+//            }
+//        }
         Review saveReview = reviewRepository.save(review);
         return new ReviewResponseDto(saveReview);
     }
@@ -95,5 +95,13 @@ public class ReviewService {
                 .orElseThrow(() -> new BaseException("존재하지 않는 리뷰입니다."));
 
         return new GetDetailReviewDto(review);
+    }
+
+    public SkillDetailResponseDto getSkillDetail(Long completeTaskId) {
+        CompleteTask completeTask = completeTaskRepository.findById(completeTaskId)
+                .orElseThrow(()-> new BaseException("존재하지 않는 태스크입니다."));
+
+        return new SkillDetailResponseDto(completeTask.getSignTask());
+
     }
 }

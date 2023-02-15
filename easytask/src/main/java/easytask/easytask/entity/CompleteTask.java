@@ -48,10 +48,9 @@ public class CompleteTask extends BaseEntity{
         this.money=usageTime.getHour()*60*160
                 + usageTime.getMinute()*160
                 + usageTime.getSecond()*160/60;
-
-
-
     }
+
+
 
 
 

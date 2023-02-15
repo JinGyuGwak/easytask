@@ -9,28 +9,22 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Data
 @AllArgsConstructor
-public class SignTaskResponseDto {
-    private Long id;
-    private Long userId;
-    private String email;
+public class SkillDetailResponseDto {
 
     private List<String> professionalSkill = new ArrayList<>();
     private List<String> programSkill = new ArrayList<>();
 
 
-
-
-    public SignTaskResponseDto(SignTask signTask){
-        this.id= signTask.getId();
-        this.userId=signTask.getCustomerUser().getId();
-        this.email=signTask.getCustomerUser().getEmail();
-        for(ProfessionalSkill a : signTask.getProfessionalSkillList()){
+    public SkillDetailResponseDto(SignTask signTask) {
+        for (ProfessionalSkill a : signTask.getProfessionalSkillList()) {
             this.professionalSkill.add(a.getSkill());
         }
-        for(ProgramSkill a : signTask.getProgramSkillList()){
+        for (ProgramSkill a : signTask.getProgramSkillList()) {
             this.programSkill.add(a.getSkill());
         }
     }
+
 }

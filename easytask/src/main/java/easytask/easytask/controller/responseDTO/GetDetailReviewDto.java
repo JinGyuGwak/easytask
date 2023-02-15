@@ -1,7 +1,6 @@
 package easytask.easytask.controller.responseDTO;
 
 import easytask.easytask.entity.Review;
-import easytask.easytask.entity.skill.PersonalSkillRating;
 import easytask.easytask.entity.skill.ProfessionalSkillRating;
 import easytask.easytask.entity.skill.ProgramSkillRating;
 import lombok.AllArgsConstructor;
@@ -24,7 +23,6 @@ public class GetDetailReviewDto {
 
     private List<Map<String, Double>> professionalDetail = new ArrayList<>();
     private List<Map<String, Double>> programDetail = new ArrayList<>();
-    private List<Map<String, Double>> personalDetail = new ArrayList<>();
 
 
 
@@ -48,11 +46,6 @@ public class GetDetailReviewDto {
             Map<String, Double> newMap = new HashMap<>();
             newMap.put(a.getSkillName(),a.getRating());
             this.programDetail.add(newMap);
-        }
-        for(PersonalSkillRating a : review.getPersonalSkillRatingList()){
-            Map<String, Double> newMap = new HashMap<>();
-            newMap.put(a.getSkillName(),a.getRating());
-            this.personalDetail.add(newMap);
         }
 
     }

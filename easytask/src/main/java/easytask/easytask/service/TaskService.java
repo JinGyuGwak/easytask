@@ -53,6 +53,7 @@ public class TaskService {
         return new SignTaskResponseDto(saveSignTask);
 
     }
+
     public List<SignTaskResponseDto> getTask(){
         List<SignTask> signTask = signTaskRepository.findAllSignTask();
         List<SignTaskResponseDto> result = signTask.stream()

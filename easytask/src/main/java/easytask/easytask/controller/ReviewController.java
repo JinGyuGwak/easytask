@@ -6,6 +6,7 @@ import easytask.easytask.controller.requestDTO.ReviewRequestDto;
 import easytask.easytask.controller.responseDTO.GetDetailReviewDto;
 import easytask.easytask.controller.responseDTO.ReviewResponseDto;
 import easytask.easytask.controller.responseDTO.GetReviewDto;
+import easytask.easytask.controller.responseDTO.SkillDetailResponseDto;
 import easytask.easytask.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,17 @@ public class ReviewController {
         String result = "삭제 완료!";
         return new BaseResponse<>(result);
     }
+
+    //완료된 업부 스킬 세부사항 조회
+    @GetMapping("/review/skill-detail/{completeTaskId}")
+    public BaseResponse<SkillDetailResponseDto> getSkillDetail(
+            @PathVariable Long completeTaskId){
+        SkillDetailResponseDto skillDetailResponseDto =
+                reviewService.getSkillDetail(completeTaskId);
+        return new BaseResponse<>(skillDetailResponseDto);
+
+    }
+
 
     //전부조회
     @GetMapping("/review/{irumiId}")
