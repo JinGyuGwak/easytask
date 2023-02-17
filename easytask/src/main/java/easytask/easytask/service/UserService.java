@@ -5,6 +5,7 @@ import easytask.easytask.controller.requestDTO.UserRequestDto;
 import easytask.easytask.controller.responseDTO.UserResponseDto;
 import easytask.easytask.entity.User;
 import easytask.easytask.repository.UserRepository;
+import easytask.easytask.service.func.FuncUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final FuncUser funcUser;
 
     public UserResponseDto registerUser(UserRequestDto request){
         User user = userRepository.save(new User(request)); //id값 받아오자
@@ -22,8 +24,7 @@ public class UserService {
 
     public UserResponseDto patchUser(Long id,UserRequestDto request){
 
-        User user = userRepository.findById(id)
-                .orElseThrow(()-> new BaseException("존재하지 않는 회원 입니다."));
+        User user = funcUser.selectUserById(id);
         user.patchUser(request);
         return new UserResponseDto(user);
     }

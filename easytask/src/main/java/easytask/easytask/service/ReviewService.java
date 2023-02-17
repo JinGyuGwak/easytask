@@ -10,16 +10,18 @@ import easytask.easytask.entity.CompleteTask;
 import easytask.easytask.entity.Review;
 import easytask.easytask.entity.skill.ProfessionalSkillRating;
 import easytask.easytask.entity.skill.ProgramSkillRating;
+import easytask.easytask.entity.skill.SkillRating;
 import easytask.easytask.repository.CompleteTaskRepository;
 import easytask.easytask.repository.ReviewRepository;
+import easytask.easytask.service.func.FuncReview;
+import easytask.easytask.service.func.FuncTask;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -28,14 +30,24 @@ import java.util.stream.Collectors;
 public class ReviewService {
     private final CompleteTaskRepository completeTaskRepository;
     private final ReviewRepository reviewRepository;
+    private final FuncReview funcReview;
+    private final FuncTask funcTask;
 
-
-
+    private void addSkillRatings(List<Map<String, Double>> details) {
+        if (details != null) {
+            for(Map<String,Double> a : details){
+                String skill = a.keySet().iterator().next();
+                Double rating = a.values().iterator().next();
+            }
+        }
+    }
     public ReviewResponseDto createReview(Long completeTaskId, ReviewRequestDto requestDto) {
-        CompleteTask task = completeTaskRepository.findById(completeTaskId)
-                .orElseThrow(() -> new BaseException("해당 업무를 찾을 수 없습니다."));
+        CompleteTask task = funcTask.selectCompleteTaskById(completeTaskId);
         Review review = new Review(task,requestDto);
 
+//        addSkillRatings(requestDto.getProfessionalDetail());
+//        addSkillRatings(requestDto.getProgramDetail());
+        //어떻게 줄이지
         if (requestDto.getProfessionalDetail() != null) {
             for (Map<String, Double> a : requestDto.getProfessionalDetail()) {
                 String skill = a.keySet().iterator().next();
@@ -50,38 +62,26 @@ public class ReviewService {
                 review.addProgramSkillRating(new ProgramSkillRating(skill, rating));
             }
         }
-//        if (requestDto.getPersonalDetail() != null) {
-//            for (Map<String, Double> a : requestDto.getPersonalDetail()) {
-//                String skill = a.keySet().iterator().next();
-//                Double rating = a.values().iterator().next();
-//                review.addPersonalSkillRating(new PersonalSkillRating(skill, rating));
-//            }
-//        }
+
         Review saveReview = reviewRepository.save(review);
         return new ReviewResponseDto(saveReview);
     }
 
 
-
-
-
-
     public ReviewResponseDto modifyReview(Long reviewId, ReviewRequestDto requestDto) {
-        Review review=reviewRepository.findById(reviewId)
-                .orElseThrow(()-> new BaseException("해당 리뷰를 찾을 수 없습니다."));
+        Review review=funcReview.selectReviewById(reviewId);
         review.modifyReview(requestDto);
         return new ReviewResponseDto(review);
     }
 
     public void deleteReview(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(()-> new BaseException("해당 리뷰를 찾을 수 없습니다."));
+        Review review=funcReview.selectReviewById(reviewId);
         review.deleteReview();
 
     }
 
     public List<GetReviewDto> getUserReview(Long irumiId) {
-        List<Review> reviewList = reviewRepository.findByIrumiId(irumiId);
+        List<Review> reviewList = funcReview.selectAllReviewByIrumiId(irumiId);
         List<GetReviewDto> reviewDtoList = reviewList.stream()
                 .map(r -> new GetReviewDto(r))
                 .collect(Collectors.toList());
@@ -91,17 +91,16 @@ public class ReviewService {
     //리뷰상세조회
     public GetDetailReviewDto getDetailUserReview(Long reviewId) {
         System.out.println("reviewId = " + reviewId);
-        Review review=reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new BaseException("존재하지 않는 리뷰입니다."));
+        Review review=funcReview.selectReviewById(reviewId);
 
         return new GetDetailReviewDto(review);
     }
 
     public SkillDetailResponseDto getSkillDetail(Long completeTaskId) {
-        CompleteTask completeTask = completeTaskRepository.findById(completeTaskId)
-                .orElseThrow(()-> new BaseException("존재하지 않는 태스크입니다."));
-
+        CompleteTask completeTask = funcTask.selectCompleteTaskById(completeTaskId);
         return new SkillDetailResponseDto(completeTask.getSignTask());
-
     }
+
+
+
 }

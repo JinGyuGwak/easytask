@@ -33,7 +33,6 @@ public class ProfessionalSkillRating extends BaseEntity {
         this.skillName=skillName;
         this.rating=rating;
     }
-
     public void setReview(Review review){
         this.review=review;
     }

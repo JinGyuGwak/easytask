@@ -13,6 +13,8 @@ import easytask.easytask.entity.skill.ProgramSkill;
 import easytask.easytask.repository.CompleteTaskRepository;
 import easytask.easytask.repository.SignTaskRepository;
 import easytask.easytask.repository.UserRepository;
+import easytask.easytask.service.func.FuncTask;
+import easytask.easytask.service.func.FuncUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +26,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class TaskService {
-    private final UserRepository userRepository;
     private final SignTaskRepository signTaskRepository;
     private final CompleteTaskRepository completeTaskRepository;
+    private final FuncTask funcTask;
+    private final FuncUser funcUser;
+
 
     public SignTaskResponseDto registerTask(SignTaskRequestDto request){
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BaseException("잘못된 요청입니다."));
+        User user = funcUser.selectUserByEmail(request.getEmail());
 
         SignTask signTask = new SignTask(user);
         if(request.getProfessionalSkill()!=null){
@@ -43,11 +46,6 @@ public class TaskService {
                 signTask.addProgramSkill(new ProgramSkill(a));
             }
         }
-//        if(request.getPersonalSkill() != null){
-//            for(String a : request.getPersonalSkill()){
-//                signTask.addPersonalSkill(new PersonalSkill(a));
-//            }
-//        }
 
         SignTask saveSignTask = signTaskRepository.save(signTask);
         return new SignTaskResponseDto(saveSignTask);
@@ -55,7 +53,7 @@ public class TaskService {
     }
 
     public List<SignTaskResponseDto> getTask(){
-        List<SignTask> signTask = signTaskRepository.findAllSignTask();
+        List<SignTask> signTask = funcTask.selectAllSignTask();
         List<SignTaskResponseDto> result = signTask.stream()
                 .map(x -> new SignTaskResponseDto(x))
                 .collect(Collectors.toList());
@@ -63,12 +61,9 @@ public class TaskService {
     }
 
     public CompleteTaskResponseDto completion(CompleteTaskRequestDto requestDto){
-        SignTask signTask = signTaskRepository.findById(requestDto.getSignTaskId())
-                .orElseThrow(() -> new BaseException("존재하지 않는 업무입니다."));
+        SignTask signTask = funcTask.selectSignTaskById(requestDto.getSignTaskId());
         signTask.completion();
-
-        User irumiUser = userRepository.findById(requestDto.getIrumiId())
-                .orElseThrow(()-> new BaseException("존재하지 않는 회원입니다."));
+        User irumiUser = funcUser.selectUserById(requestDto.getIrumiId());
 
         CompleteTask completeTask = completeTaskRepository.
                 save((new CompleteTask(signTask,irumiUser,requestDto.getUsageTime())));
