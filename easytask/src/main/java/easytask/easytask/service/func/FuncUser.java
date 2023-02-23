@@ -14,6 +14,12 @@ import java.util.List;
 public class FuncUser {
     private final UserRepository userRepository;
 
+
+
+    public boolean checkEmail(String email){
+        return userRepository.existsByEmail(email);
+    }
+
     public User selectUserById(Long id){
         return userRepository.findById(id)
                 .orElseThrow(()-> new BaseException("존재하지 않는 회원입니다."));

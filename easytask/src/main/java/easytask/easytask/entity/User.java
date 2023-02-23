@@ -28,7 +28,7 @@ public class User extends BaseEntity{
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Role role;
 
     @ColumnDefault("0")
@@ -51,8 +51,8 @@ public class User extends BaseEntity{
 
     @Builder
     public User (UserRequestDto userRequestDto){
-        this.name= userRequestDto.getName();
         this.email= userRequestDto.getEmail();
+        this.name= userRequestDto.getName();
         this.password= userRequestDto.getPassword();
     }
     @Builder

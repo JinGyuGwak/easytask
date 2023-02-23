@@ -49,7 +49,6 @@ public class TaskService {
 
         SignTask saveSignTask = signTaskRepository.save(signTask);
         return new SignTaskResponseDto(saveSignTask);
-
     }
 
     public List<SignTaskResponseDto> getTask(){
@@ -63,6 +62,7 @@ public class TaskService {
     public CompleteTaskResponseDto completion(CompleteTaskRequestDto requestDto){
         SignTask signTask = funcTask.selectSignTaskById(requestDto.getSignTaskId());
         signTask.completion();
+
         User irumiUser = funcUser.selectUserById(requestDto.getIrumiId());
 
         CompleteTask completeTask = completeTaskRepository.

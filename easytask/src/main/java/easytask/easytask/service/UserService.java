@@ -17,8 +17,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final FuncUser funcUser;
 
-    public UserResponseDto registerUser(UserRequestDto request){
-        User user = userRepository.save(new User(request)); //id값 받아오자
+    public UserResponseDto registerUser(UserRequestDto requestDto){
+
+        User user = userRepository.save(new User(requestDto)); //id값 받아오자
         return new UserResponseDto(user);
     }
 

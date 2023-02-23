@@ -1,4 +1,4 @@
-package easytask.easytask.config.auth.dto;
+package easytask.easytask.common.config.auth.dto;
 
 import easytask.easytask.entity.User;
 import lombok.Getter;

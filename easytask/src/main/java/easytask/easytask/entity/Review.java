@@ -84,8 +84,6 @@ public class Review extends BaseEntity {
         this.programSkillRatingList.add(rating);
         rating.setReview(this);
     }
-
-
     public void deleteReview() {
         this.state=State.INACTIVE;
     }
