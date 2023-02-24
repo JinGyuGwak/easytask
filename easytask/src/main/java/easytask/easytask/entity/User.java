@@ -4,10 +4,14 @@ import easytask.easytask.controller.requestDTO.UserRequestDto;
 import easytask.easytask.entity.enumClass.Role;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "USER")
@@ -36,6 +40,13 @@ public class User extends BaseEntity{
 
     @ColumnDefault("0")
     private int money;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_authority",
+            joinColumns = {@JoinColumn(name = "userId", referencedColumnName = "userId")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+    private Set<Authority> authorities;
 
     @OneToMany(mappedBy = "customerUser")
     List<SignTask> signTaskList = new ArrayList<>();
@@ -72,7 +83,12 @@ public class User extends BaseEntity{
         return this;
     }
 
+
+
+
     public String getRoleKey(){
         return this.role.getKey();
     }
+
+
 }
