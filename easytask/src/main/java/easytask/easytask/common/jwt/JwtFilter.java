@@ -31,9 +31,9 @@ public class JwtFilter extends GenericFilterBean {
         String jwt = resolveToken(httpServletRequest); //resolveToken 을 통해 토큰을 받아옴
         String requestURI = httpServletRequest.getRequestURI();
 
-        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) { //받아욘 jwt 유효성 검증을 하고 정상 토큰이면 SecurityContext 에 저장
-            Authentication authentication = tokenProvider.getAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) { //받아욘 토큰을 아까 만든 tokenProvider 에서 유효성 검증을 한다.
+            Authentication authentication = tokenProvider.getAuthentication(jwt); //토큰이 정상이면 Authentication 객체를 받아온다.
+            SecurityContextHolder.getContext().setAuthentication(authentication); //받아온 Authentication 객체를 SecurityContext에 set 해준다, 즉 저장한다
             logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
         } else {
             logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
