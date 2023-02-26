@@ -37,11 +37,11 @@ public class OAuthAttributes {
                 .build();
     }
     //User엔티티를 생성
-    public User toEntity(){
-        return new User(name,email,Role.GUEST);
+//    public User toEntity(){
+//        return new User(name,email,Role.GUEST);
 //                User.builder()
 //                .name(name)
 //                .email(email)
 //                .role(Role.GUEST).build();
-    }
+//    }
 }

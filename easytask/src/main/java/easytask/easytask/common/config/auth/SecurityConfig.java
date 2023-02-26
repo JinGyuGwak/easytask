@@ -22,6 +22,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
 
     public SecurityConfig(
             TokenProvider tokenProvider,
@@ -63,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeHttpRequests()//HttpServletRequest를 사용하는 요청들에 대한 접근체한을 설정
-                .antMatchers("/","/hello","/sign-up/register").permitAll() //  여기서 설정한 url에 대한 요청은 인증없이 접근을 허용하겠다는 의미
+                .antMatchers("/","/login","/sign-up/register","/user/**").permitAll() //  여기서 설정한 url에 대한 요청은 인증없이 접근을 허용하겠다는 의미
                 .anyRequest().authenticated() //그 이외 나머지 요청들은 모두 인증되어야 한다.
 
                 .and()

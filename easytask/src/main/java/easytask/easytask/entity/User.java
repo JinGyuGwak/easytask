@@ -1,17 +1,11 @@
 package easytask.easytask.entity;
 
 import easytask.easytask.controller.requestDTO.UserRequestDto;
-import easytask.easytask.entity.enumClass.Role;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "USER")
@@ -26,14 +20,14 @@ public class User extends BaseEntity{
     @Column(nullable = false, length = 100)
     private String email;
 
+    private String password;
+
     @Column(nullable = false, length = 30)
     private String name;
 
-    private String password;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
-    private Role role;
+//    @Enumerated(EnumType.STRING)
+//    @Column(nullable = true)
+//    private Role role;
 
     @ColumnDefault("0")
     private int point; //이용권
@@ -60,18 +54,27 @@ public class User extends BaseEntity{
     @OneToMany(mappedBy = "irumiUser")
     List<Review> reviewList = new ArrayList<>();
 
-    @Builder
     public User (UserRequestDto userRequestDto){
         this.email= userRequestDto.getEmail();
         this.name= userRequestDto.getName();
         this.password= userRequestDto.getPassword();
+
     }
     @Builder
-    public User(String name, String email, Role role){
-        this.name=name;
+    public User (String email, String password,String name,Set<Authority> authorities){
         this.email=email;
-        this.role=role;
+        this.password=password;
+        this.name=name;
+        this.authorities=authorities;
+
     }
+
+//    @Builder
+//    public User(String name, String email, Role role){
+//        this.name=name;
+//        this.email=email;
+//        this.role=role;
+//    }
 
     public void patchUser(UserRequestDto userRequestDto){
         this.email= userRequestDto.getEmail();
@@ -86,9 +89,9 @@ public class User extends BaseEntity{
 
 
 
-    public String getRoleKey(){
-        return this.role.getKey();
-    }
+//    public String getRoleKey(){
+//        return this.role.getKey();
+//    }
 
 
 }
