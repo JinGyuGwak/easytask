@@ -17,15 +17,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,6 +40,8 @@ public class UserController {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
+
+
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -59,18 +58,17 @@ public class UserController {
         return ResponseEntity.ok(userService.signup(userRequestDto));
     }
 
-    @GetMapping("/user")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public ResponseEntity<User> getMyUserInfo(HttpServletRequest request) {
-
-        System.out.println("뭔데");
-        return ResponseEntity.ok(userService.getMyUserWithAuthorities());
-    }
-
     @GetMapping("/user/{email}")
     @Secured("ROLE_ADMIN")
     public ResponseEntity<User> getUserInfo(@PathVariable String email) {
         System.out.println("email = " + email);
+        return ResponseEntity.ok(userService.getUserWithAuthorities(email));
+    }
+    @GetMapping("/user1/{email}")
+    @Secured("ROLE_USER")
+    public ResponseEntity<User> getUserInfo1(@PathVariable String email) {
+        System.out.println("email = " + email);
+
         return ResponseEntity.ok(userService.getUserWithAuthorities(email));
     }
 

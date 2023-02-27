@@ -3,8 +3,8 @@ package easytask.easytask.service;
 import easytask.easytask.common.exception.BaseException;
 import easytask.easytask.controller.requestDTO.UserRequestDto;
 import easytask.easytask.controller.responseDTO.UserResponseDto;
-import easytask.easytask.entity.Authority;
 import easytask.easytask.entity.User;
+import easytask.easytask.entity.enumClass.Role;
 import easytask.easytask.repository.UserRepository;
 import easytask.easytask.service.func.FuncUser;
 import lombok.RequiredArgsConstructor;
@@ -26,37 +26,25 @@ public class UserService {
 
     @Transactional
     public UserRequestDto signup(UserRequestDto userDto) {
-//        if (userRepository.findOneWithAuthoritiesByEmail(userDto.getName()).orElse(null) != null) {
-//            throw new BaseException("이미 가입되어 있는 유저입니다.");
-//        }
-
-        Authority authority = Authority.builder()
-                .authorityName("ROLE_USER")
-                .build();
-
+        if (funcUser.checkEmail(userDto.getEmail())){ //존재하면 1
+            throw new BaseException("이미 존재하는 이메일입니다.");
+        }
         User user = User.builder()
                 .email(userDto.getEmail())
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .name(userDto.getName())
-                .authorities(Collections.singleton(authority))
+                .role(Role.ROLE_USER)
                 .build();
 
-        User user1=userRepository.save(user);
-
-        return new UserRequestDto(user1);
+        System.out.println("user.getRoleKey() = " + user.getRoleKey());
+        User saveUser=userRepository.save(user);
+        return new UserRequestDto(saveUser);
     }
 
     @Transactional(readOnly = true)
     public User getUserWithAuthorities(String email) {
-        return userRepository.findOneWithAuthoritiesByEmail(email).get();
+        return userRepository.findOneByEmail(email).get();
     }
-
-    @Transactional(readOnly = true)
-    public User getMyUserWithAuthorities() {
-        return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByEmail).get();
-
-    }
-
 
     public UserResponseDto registerUser(UserRequestDto requestDto){
 
@@ -65,7 +53,6 @@ public class UserService {
     }
 
     public UserResponseDto patchUser(Long id,UserRequestDto request){
-
         User user = funcUser.selectUserById(id);
         user.patchUser(request);
         return new UserResponseDto(user);

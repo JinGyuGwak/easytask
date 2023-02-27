@@ -2,6 +2,7 @@ package easytask.easytask.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import easytask.easytask.controller.requestDTO.UserRequestDto;
+import easytask.easytask.entity.enumClass.Role;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -26,23 +27,15 @@ public class User extends BaseEntity{
     @Column(nullable = false, length = 30)
     private String name;
 
-//    @Enumerated(EnumType.STRING)
-//    @Column(nullable = true)
-//    private Role role;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private Role role;
 
     @ColumnDefault("0")
     private int point; //이용권
 
     @ColumnDefault("0")
     private int money;
-
-    @ManyToMany
-    @JoinTable(
-            name = "userAuthority",
-            joinColumns = {@JoinColumn(name = "userId", referencedColumnName = "userId")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
-    private Set<Authority> authorities;
-
 
     @JsonIgnore
     @OneToMany(mappedBy = "customerUser")
@@ -67,37 +60,28 @@ public class User extends BaseEntity{
 
     }
     @Builder
-    public User (String email, String password,String name,Set<Authority> authorities){
+    public User (String email, String password,String name,Role role){
         this.email=email;
         this.password=password;
         this.name=name;
-        this.authorities=authorities;
+        this.role=role;
 
     }
-
-//    @Builder
-//    public User(String name, String email, Role role){
-//        this.name=name;
-//        this.email=email;
-//        this.role=role;
-//    }
 
     public void patchUser(UserRequestDto userRequestDto){
         this.email= userRequestDto.getEmail();
         this.name= userRequestDto.getName();
         this.password= userRequestDto.getPassword();
     }
+
     public User update(String name){
         this.name=name;
         return this;
     }
 
-
-
-
-//    public String getRoleKey(){
-//        return this.role.getKey();
-//    }
+    public String getRoleKey(){
+        return this.getRole().toString();
+    }
 
 
 }

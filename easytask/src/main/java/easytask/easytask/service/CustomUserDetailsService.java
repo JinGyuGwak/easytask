@@ -23,24 +23,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String email) {
-        return userRepository.findOneWithAuthoritiesByEmail(email) //유저 정보를 권한정보와 함께 가져온다.
-                .map(a -> createUser(email, a)) //userRepository 에서 받은 객체 a(유저)와 파라미터로 받은 email 로 createUser 호출
-                .orElseThrow(() -> new BaseException("DB에 등록되지 않은 유저입니다."));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findOneByEmail(username)
+                .orElseThrow(() -> new BaseException("DB에 없는 유저입니다."));
+
+        System.out.println("username : " + username);
+        if(user != null) {
+            return new PrincipalDetails(user);
+        }
+        return null;
     }
 
-    private org.springframework.security.core.userdetails.User createUser(String email, User user) {
-//        if (!user.isActivated()) {
-//            throw new RuntimeException(username + " -> 활성화되어 있지 않습니다.");
-//        }
-
-        List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
-                .collect(Collectors.toList());
-
-        return new org.springframework.security.core.userdetails.User(user.getEmail(),
-                user.getPassword(),
-                grantedAuthorities); //해당정보(이메일, 비밀번호,권한) 를 기반으로 userdetails.User 객체를 생성해서 리턴함
-    }
 }
