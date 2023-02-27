@@ -7,7 +7,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     # DDl 생성 시 데이터베이스 고유의 기능 사용여부

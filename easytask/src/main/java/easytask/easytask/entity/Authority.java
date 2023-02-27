@@ -2,10 +2,7 @@ package easytask.easytask.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "authority")
@@ -15,7 +12,6 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Authority {
-
     @Id
     @Column(name = "authority_name", length = 50)
     private String authorityName;  //권한명 이라는 PK

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -58,22 +59,20 @@ public class UserController {
         return ResponseEntity.ok(userService.signup(userRequestDto));
     }
 
-//    @GetMapping("/user")
-//    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-//    public ResponseEntity<User> getMyUserInfo(HttpServletRequest request) {
-//        return ResponseEntity.ok(userService.getMyUserWithAuthorities());
-//    }
-//
-//    @GetMapping("/user/{username}")
-//    @PreAuthorize("hasAnyRole('ADMIN')")
-//    public ResponseEntity<User> getUserInfo(@PathVariable String email) {
-//        return ResponseEntity.ok(userService.getUserWithAuthorities(email));
-//    }
+    @GetMapping("/user")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    public ResponseEntity<User> getMyUserInfo(HttpServletRequest request) {
 
+        System.out.println("뭔데");
+        return ResponseEntity.ok(userService.getMyUserWithAuthorities());
+    }
 
-
-
-
+    @GetMapping("/user/{email}")
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<User> getUserInfo(@PathVariable String email) {
+        System.out.println("email = " + email);
+        return ResponseEntity.ok(userService.getUserWithAuthorities(email));
+    }
 
 
     @PostMapping("/sign-up/register")

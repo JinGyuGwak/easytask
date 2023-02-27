@@ -1,5 +1,6 @@
 package easytask.easytask.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import easytask.easytask.controller.requestDTO.UserRequestDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -37,20 +38,25 @@ public class User extends BaseEntity{
 
     @ManyToMany
     @JoinTable(
-            name = "user_authority",
+            name = "userAuthority",
             joinColumns = {@JoinColumn(name = "userId", referencedColumnName = "userId")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<Authority> authorities;
 
+
+    @JsonIgnore
     @OneToMany(mappedBy = "customerUser")
     List<SignTask> signTaskList = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "irumiUser")
     List<CompleteTask> irumiList = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customerUser")
     List<CompleteTask> customerList = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "irumiUser")
     List<Review> reviewList = new ArrayList<>();
 
